@@ -72,3 +72,60 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
+
+package com.tesoem.practica2material3;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+public class MainActivity extends AppCompatActivity {
+
+    private TextInputLayout tilUsuario, tilPassword;
+    private TextInputEditText etUsuario, etPassword;
+    private MaterialButton btnIngresar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // Activar Material You / Dynamic Colors si el dispositivo lo soporta
+        DynamicColors.applyToActivityIfAvailable(this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        tilUsuario = findViewById(R.id.tilUsuario);
+        tilPassword = findViewById(R.id.tilPassword);
+        etUsuario = findViewById(R.id.etUsuario);
+        etPassword = findViewById(R.id.etPassword);
+        btnIngresar = findViewById(R.id.btnIngresar);
+
+        btnIngresar.setOnClickListener(v -> validarAcceso());
+    }
+
+    private void validarAcceso() {
+        String usuario = etUsuario.getText() != null ? etUsuario.getText().toString().trim() : "";
+        String password = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
+
+        tilUsuario.setError(null);
+        tilPassword.setError(null);
+
+        if (TextUtils.isEmpty(usuario)) {
+            tilUsuario.setError("Ingrese su usuario");
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            tilPassword.setError("Ingrese su contraseña");
+            return;
+        }
+
+        Toast.makeText(this, "Bienvenido, " + usuario, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        intent.putExtra("USUARIO_ACTIVO", usuario);
+        startActivity(intent);
+    }
+}
